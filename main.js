@@ -1,5 +1,29 @@
 'use strict';
 
+const calculateBtn = document.getElementById('start');
+const incomeAddBtn = document.querySelector('.income_add');
+const expensesAddBtn = document.querySelector('.expenses_add');
+const depositCheckbox = document.querySelector('#deposit-check');
+const addIncomeInputs = document.querySelectorAll('.additional_income-item');
+const resultBudgetMonth = document.getElementsByClassName('budget_month-value');
+const resultBudgetDay = document.getElementsByClassName('budget_day-value');
+const resultExpensesMonth = document.getElementsByClassName('expenses_month-value');
+const resultAddIncome = document.getElementsByClassName('additional_income-value');
+const resultAddExpenses = document.getElementsByClassName('additional_expenses-value');
+const resultIncomePeriod = document.getElementsByClassName('income_period-value');
+const resultTargetMonth = document.getElementsByClassName('target_month-value');
+const salary = document.querySelector('.salary-amount');
+const incomeName = document.querySelector('.income-title');
+const incomeAmount = document.querySelector('.income-amount');
+const addIncomeItem = document.querySelectorAll('additional_income-item');
+const expensesName = document.querySelector('.expenses-title');
+const expensesAmount = document.querySelector('.expenses-amount');
+const addExpensesItem = document.querySelector('.additional_expenses-item');
+const targetAmount = document.querySelector('.target-amount');
+const periodAmount = document.querySelector('.period-select');
+
+
+
 let isNumber = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
@@ -12,7 +36,7 @@ let money,
         while (!isNumber(money));
     };
 
-start();
+// start();
 
 let appData = {
     budget: money,
@@ -64,11 +88,11 @@ let appData = {
     },
 };
 
-appData.asking();
-appData.getExpensesMonth();
-appData.getBudget();
-appData.getTargetMonth();
-appData.getStatusIncome();
+// appData.asking();
+// appData.getExpensesMonth();
+// appData.getBudget();
+// appData.getTargetMonth();
+// appData.getStatusIncome();
 
 console.log('Расходы за месяц: ' + appData.expensesMonth);
 
