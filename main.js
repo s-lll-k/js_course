@@ -106,10 +106,10 @@ let appData = {
     },
     getInfoDeposit: function () {
         if(appData.deposit){
-            while (!isNumber(appData.percentDeposit)) {
+            while (!isNumber(appData.percentDeposit) || appData.percentDeposit === 0) {
                 appData.percentDeposit = prompt('Какой годовой процент?', 10);
             }
-            while (!isNumber(appData.moneyDeposit)) {
+            while (!isNumber(appData.moneyDeposit || appData.moneyDeposit === 0)) {
                 appData.moneyDeposit = prompt('Какая сумма заложена?', 100000);
             }
         }
