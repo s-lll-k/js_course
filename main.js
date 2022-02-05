@@ -44,11 +44,9 @@ class AppData {
     start(){
         this.budget = +salary.value;
     
-        this.getExpenses();
-        this.getIncome();
+        this.getExpInc();
         this.getExpensesMonth();
-        this.getAddExpenses();
-        this.getAddIncome();
+        this.getAddExpInc();
         this.getBudget();
     
         this.showResult();
@@ -68,68 +66,49 @@ class AppData {
         });
     }
 
-    addExpensesBlock(){
-        let cloneExpensesItem = expensesItems[0].cloneNode(true);
-        expensesItems[0].parentNode.insertBefore(cloneExpensesItem, expensesAddBtn);
-    
-        expensesItems = document.querySelectorAll('.expenses-items');
-        if (expensesItems.length === 3) {
-            expensesAddBtn.style.display = 'none';
+    addExpIncBlock(item){
+        const cloningElement = item.previousElementSibling;
+        const clone = cloningElement.cloneNode(true);
+        clone.querySelectorAll('input').forEach(item => {
+            item.value = '';
+        });
+        item.before(clone);
+        if (document.querySelectorAll(`.${cloningElement.className}`).length === 3) {
+            item.style.display = 'none';
         }
     }
 
-    getExpenses(){
-        const _this = this;
-        expensesItems.forEach(function(item){
-            let itemExpenses = item.querySelector('.expenses-title').value;
-            let cashExpenses = item.querySelector('.expenses-amount').value;
-            if(itemExpenses !== '' && cashExpenses !== ''){
-                _this.expenses[itemExpenses] = cashExpenses;
-            }
-        });  
-    }
 
-    getIncome(){
-        const _this = this;
-        incomeItems.forEach(function(item){
-            let itemIncome = item.querySelector('.income-title').value;
-            let cashIncome = item.querySelector('.income-amount').value;
-            if(itemIncome !== '' && cashIncome !== ''){
-                _this.income[itemIncome] = cashIncome;
+    getExpInc(){
+        const count = item =>{
+            const startStr = item.className.split('-')[0];
+            const itemTitle = item.querySelector(`.${startStr}-title`).value;
+            const itemAmount = item.querySelector(`.${startStr}-amount`).value;
+            if(itemTitle !== '' && itemAmount !== ''){
+                this[startStr][itemTitle] = itemAmount;
             }
-        });  
+        };
+
+        expensesItems.forEach(count);
+        incomeItems.forEach(count);
+        
         for (const key in this.income) {
             this.incomeMounth += parseInt(this.income[key]);
         }
     }
 
-    addIncomeBlock(){
-        let cloneIncomeItem = incomeItems[0].cloneNode(true);
-        incomeItems[0].parentNode.insertBefore(cloneIncomeItem, incomeAddBtn);
-    
-        incomeItems = document.querySelectorAll('.income-items');
-        if (incomeItems.length === 3) {
-            incomeAddBtn.style.display = 'none';
-        }
-    }
-
-    getAddExpenses(){
-        const _this = this;
+    getAddExpInc(){
         let addExpenses = addExpensesItem.value.split(',');
-        addExpenses.forEach(function (item) {
+        addExpenses.forEach(item => {
             item = item.trim();
             if (item !== '') {
-                _this.addExpenses.push(item);
+                this.addExpenses.push(item);
             }
         });
-    }
-
-    getAddIncome(){
-        const _this = this;
-        addIncomeInputs.forEach(function (item) {
+        addIncomeInputs.forEach(item => {
             let itemValue = item.value.trim();
             if (itemValue !== '') {
-                _this.addIncome.push(itemValue);
+                this.addIncome.push(itemValue);
             }
         });
     }
@@ -190,8 +169,9 @@ class AppData {
             }
         });
     
-        expensesAddBtn.addEventListener('click', _this.addExpensesBlock);
-        incomeAddBtn.addEventListener('click', _this.addIncomeBlock);
+        expensesAddBtn.addEventListener('click', function(){_this.addExpIncBlock(this)});
+        incomeAddBtn.addEventListener('click', function(){_this.addExpIncBlock(this)});
+
         periodSelect.addEventListener('input', function(){
             periodAmount.textContent = periodSelect.value;
         });
