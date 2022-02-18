@@ -208,7 +208,6 @@ window.addEventListener('DOMContentLoaded', function () {
                 let newDot = document.createElement('li');
                 newDot.classList.add('dot');
                 if (elem.classList.contains('portfolio-item-active')) {
-                    console.log(1);
                     newDot.classList.add('dot-active');
                 }
                 document.querySelector('.portfolio-dots').append(newDot);
@@ -297,4 +296,49 @@ window.addEventListener('DOMContentLoaded', function () {
     };
 
     slider();
+
+    // Photos, data-attribute
+
+    const photosBlock = document.querySelector('.command .row');
+    let srcImg;
+
+    photosBlock.addEventListener('mouseover', event => {
+        let target = event.target;
+        if (target.classList.contains('command__photo')) {
+            srcImg = target.src;
+            target.src = target.dataset.img;
+        }
+    });
+    photosBlock.addEventListener('mouseout', event => {
+        let target = event.target;
+        if (target.classList.contains('command__photo')) {
+            target.src = srcImg;
+        }
+    });
+
+    // Validation
+
+    const inputSquare = document.querySelector('.calc-item.calc-square'),
+        inputCount = document.querySelector('.calc-item.calc-count'),
+        inputDay = document.querySelector('.calc-item.calc-day'),
+        inputEmail = document.querySelector('#form2-email'),
+        inputTel = document.querySelector('#form2-phone'),
+        inputName = document.querySelector('#form2-name'),
+        inputMessage = document.querySelector('#form2-message'),
+        onlyDigitsExp = /\D/,
+        emailExp = /[^A-Za-z@-_\.!~\*']/,
+        telExp = /[^0-9\()-\+]/,
+        textExp = /[^А-Яа-яЁё-\s,]/;
+    
+    const validateInputs = (validateStr, ...el) => {
+        el.forEach(item => {
+            item.addEventListener('input', () => {
+                item.value = item.value.replace(validateStr, '');
+            });
+        });
+    };
+    validateInputs(onlyDigitsExp, inputCount, inputDay, inputSquare);
+    validateInputs(emailExp, inputEmail);
+    validateInputs(telExp, inputTel);
+    validateInputs(textExp, inputName, inputMessage);
 });
