@@ -341,4 +341,63 @@ window.addEventListener('DOMContentLoaded', function () {
     validateInputs(emailExp, inputEmail);
     validateInputs(telExp, inputTel);
     validateInputs(textExp, inputName, inputMessage);
+
+    // Calculator
+
+    const calc = (price = 100) => {
+        const calcBlock = document.querySelector('.calc-block'),
+            calcType = document.querySelector('.calc-type'),
+            totalValue = document.getElementById('total');
+
+        const animateSum = num => {
+            let count = 0;
+            let interval = setInterval(() => {
+                if (count >= num) {
+                    totalValue.textContent = Math.round(num);
+                    clearInterval(interval);
+                } else {
+                    count += 9;
+                    totalValue.textContent = count;
+                }
+            }, 5);
+        };
+
+        const countSum = () => {
+            let total = 0,
+                countValue = 1,
+                dayValue = 1;
+            const typeValue = calcType.options[calcType.selectedIndex].value,
+                squareValue = +inputSquare.value;
+
+            if (inputCount.value > 1) {
+                countValue += (inputCount.value - 1) / 10;
+            }
+
+            if (inputDay.value && inputDay.value < 5) {
+                dayValue *= 2;
+            } else if (inputDay.value && inputDay.value < 10) {
+                dayValue *= 1.5;
+            }
+
+            if (typeValue && squareValue) {
+                total = price * typeValue * squareValue * countValue * dayValue;
+            }
+
+            animateSum(total);
+        };
+
+        calcBlock.addEventListener('change', (event) => {
+            const target = event.target;
+
+            if (target.matches('.calc-type') ||
+            target.matches('.calc-square') ||
+            target.matches('.calc-count') ||
+            target.matches('.calc-day')) {
+                countSum();
+            }
+        });
+    };
+
+    calc();
+
 });
