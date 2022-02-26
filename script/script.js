@@ -421,34 +421,32 @@ window.addEventListener('DOMContentLoaded', function () {
             formData.forEach((val, key) => {
                 body[key] = val;
             });
-            postData(body, () => {
-                statusMessage.textContent = successMessage; 
-            }, (error) => {
-                statusMessage.textContent = errorMessage;
-                console.log(error);
-            });
-
+            postData(body)
+                .then(success => statusMessage.textContent = success)
+                .catch(errMessage => statusMessage.textContent = errMessage);
         });
 
-        const postData = (body, outputData, errorData) => {
-            const request = new XMLHttpRequest();
-            request.addEventListener('readystatechange', () => {
-
-                if (request.readyState !== 4) {
-                    return;
-                }
-
-                if (request.status === 200) {
-                    outputData();
-                } else {
-                    errorData(request.status);
-                }
+        const postData = (body) => {
+            return new Promise((resolve, reject) => {
+                const request = new XMLHttpRequest();
+                request.addEventListener('readystatechange', () => {
+    
+                    if (request.readyState !== 4) {
+                        return;
+                    }
+    
+                    if (request.status === 200) {
+                        resolve(successMessage);
+                    } else {
+                        reject(errorMessage);
+                    }
+                });
+                request.open('POST', './server.php');
+                request.setRequestHeader('Content-Type', 'applicaion/json');
+                
+    
+                request.send(JSON.stringify(body));
             });
-            request.open('POST', './server.php');
-            request.setRequestHeader('Content-Type', 'applicaion/json');
-            
-
-            request.send(JSON.stringify(body));
         }
     };
     sendForm();
